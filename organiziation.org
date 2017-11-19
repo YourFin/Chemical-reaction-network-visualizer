@@ -1,0 +1,22 @@
+* How this is all getting organized
+** CRN Model
+*** Classes:
+    Overall we need to keep track of:
+     - Window size
+     - Starting positions
+     - Starting velocities
+     - Bounce angles
+     - Species
+     - Reactions
+    to create reproducable reactions, and as such our model should account for these.
+**** Species:
+     - Simply modeled as _dict_ [:species_name] of (_dict_ [frame_number] (count))
+     - count is amount of species at frame_number, new frame_numbers are only added when changes occur to the species
+     - Seperatly keep track of a list of all frames at which changes occur
+**** Reaction:
+     - _dict_ inputs -- Keys: species names; Values: count
+     - _dict_ outputs -- Keys: species names; Values: count
+     - _int_ reaction_speed -- Amount of time it takes for this reaction to occur
+     - _list
+       
+
