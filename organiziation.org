@@ -33,3 +33,11 @@
      - _int_ reaction_speed -- Amount of time it takes for this reaction to occur
 
 **** TODO: Graphics class nonsense
+
+*** Problems to solve:
+**** Graphics
+     - How do we keep track of how the molecules split?
+       - Maybe they always go out the same way (i.e. same angle between all)
+     - How do we make sure that they don't immediately collide upon splitting?
+     - How do we handle the speed of a reaction? Do molecules sometimes not react when the collide?
+     - What, if anything, gets shown alongside the reaction as it executes?
