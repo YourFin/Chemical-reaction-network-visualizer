@@ -9,14 +9,27 @@
      - Species
      - Reactions
     to create reproducable reactions, and as such our model should account for these.
+
+**** Molecule:
+     - Not imported from .cps model
+     - Tied to/inheits some gosu object
+     - _list[double]_ bounce angles
+     - _point_ start_pos -- starting position -- immutable
+     - _point_ start_velocity -- starting velocity -- immutable
+     - _point_ cur_pos -- current position -- mutable
+     - _point_ cur_velocity -- current velocity -- mutable
+    
 **** Species:
-     - Simply modeled as _dict_ [:species_name] of (_dict_ [frame_number] (count))
-     - count is amount of species at frame_number, new frame_numbers are only added when changes occur to the species
      - Seperatly keep track of a list of all frames at which changes occur
+     - _Gosu::Color_ color -- color of the Molecule
+     - _str_ label -- displayed string on top of all molecules of this type
+     - _str_ name -- Species name - must be unique
+     - _dict_ counts -- Dict with a new _int_ at every frame where the count of this species changes for graphing purposes
+     - _list[molecule]_ molecules -- a list of all molecules that are a part of this species at any point in time
+     - Null is not needed - just say things go to nothing
 **** Reaction:
      - _dict_ inputs -- Keys: species names; Values: count
      - _dict_ outputs -- Keys: species names; Values: count
      - _int_ reaction_speed -- Amount of time it takes for this reaction to occur
-     - _list
-       
 
+**** TODO: Graphics class nonsense
