@@ -13,7 +13,7 @@
 **** Molecule:
      - Not imported from .cps model
      - Tied to/inheits some gosu object
-     - _list[double]_ bounce angles
+     - _list[list[int]]_ bounce offsets in form (x,y)
      - _point_ start_pos -- starting position -- immutable
      - _point_ start_velocity -- starting velocity -- immutable
      - _point_ cur_pos -- current position -- mutable
