@@ -1,21 +1,20 @@
 #!/bin/env ruby
 
-import 'gosu'
+require 'gosu'
+require 'random'
 
-class molecule
-  def initialize(x_pos, y_pos, x_vel, y_vel)
-    @x_start_pos = x_pos
-    @y_start_pos = y_pos
-    @x_start_vel = x_vel
-    @y_start_vel = y_vel
-    @x_pos = x_pos
-    @y_pos = y_pos
-    @x_vel = x_vel
-    @y_vel = y_vel
-    @bouncelist = []
+class Species
+  def initialize(name, initial_count)
+    initialize(name, initial_count, Gosu::Color.from_hsv(Random.rand(360), 1, 1))
   end
-  def initialize(x_pos, y_pos, x_vel, y_vel, bouncelist)
-    initialize(x_pos, y_pos, x_vel, y_vel)
-    @bouncelist = bouncelist
+  def initialize(name, inital_count, color = "")
+  end
+end
+
+class Molecule
+  def initialize(x_pos, y_pos, x_vel, y_vel, species)
+    initialize(x_pos, y_pos, x_vel, y_vel, species, [])
+  end
+  def initialize(x_pos, y_pos, x_vel, y_vel, species, bouncelist)
   end
 end
