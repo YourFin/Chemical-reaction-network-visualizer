@@ -1,0 +1,45 @@
+*Final Outcome Goals:
+Once provided a CRN, we can represent the molecules as little balls of different colors and labels bouncing around in given container. (i.e. a small window to begin with) The size of the container will change with respect to the change initial state concentration. 
+Parse the CRN format that COPASI uses from files
+
+TimeLine:
+	Now 17 (Fri): 
+		Project proposal
+	Nov 20 (Mon):
+		Carol & Liat have basic understanding of ruby (follow the gosu library)
+		5 sample CRN’s from copasi for example and parsing 
+			A → B
+			Logic Gates (7 basic) 
+			A → B & B → A
+			A + B → C
+			Max function
+	Nov 27 (Mon):
+		Carol & Liat have better understanding of ruby
+		Sample Mock up of program (see below)
+		Read and write
+		Box with circles ( movement if possible)
+		Test at bottom (not necessarily updating) 
+	Dec 4 (Mon):
+		Project write up and final project done
+	Dec 6 (Fri):
+		Project due YAYAYAYA!!!!!!!!!!!!!!!!!!!!!!!!
+
+Code Outline
+	Parse and write to files 
+		Parse copasi format and write to original file
+	Visualizer
+		What is it going to look like?
+			Big box
+			Molecules (circles)
+				Different color for each species
+			Species counts at the bottom of the screen
+		What can the user set?
+			Temperature (speed of the molecules
+			Type of species and concentrations
+			Rate constant (if we have time) (extra credit)
+			Volume (size of box) 
+				Have a scale of 1 to 10 to choose from
+		What is going to be fixed?
+			Bottom display with concentration
+	Other features?
+		When molecule bounces off the side of container, we want to change the angle slightly (so its not stuck in a loop)
