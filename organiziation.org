@@ -29,9 +29,8 @@
      - _list[molecule]_ molecules -- a list of all molecules that are a part of this species at any point in time
      - Null is not needed - just say things go to nothing
 **** Reaction:
-     - _dict_ inputs -- Keys: species names; Values: count
-     - _dict_ outputs -- Keys: species names; Values: count
-     - _float_ rate_constant -- rate constant (probability that reaction occurs given the presence of all necessary species) --immutable
+     - _dict_ inputs -- Keys: species names; Values: count      what is this the count of? the necessary number of each of the species liested in the key?
+     - _dict_ outputs -- Keys: species names; Values: count     same as above
      
 
 **** TODO: Graphics class nonsense
