@@ -8,6 +8,7 @@
      - Bounce angles
      - Species
      - Reactions
+     - Rate constants
     to create reproducable reactions, and as such our model should account for these.
 
 **** Molecule:
@@ -18,7 +19,7 @@
      - _point_ start_velocity -- starting velocity -- immutable
      - _point_ cur_pos -- current position -- mutable
      - _point_ cur_velocity -- current velocity -- mutable
-    
+         
 **** Species:
      - Seperatly keep track of a list of all frames at which changes occur
      - _Gosu::Color_ color -- color of the Molecule
@@ -30,14 +31,23 @@
 **** Reaction:
      - _dict_ inputs -- Keys: species names; Values: count
      - _dict_ outputs -- Keys: species names; Values: count
-     - _int_ reaction_speed -- Amount of time it takes for this reaction to occur
+     - _float_ rate_constant -- rate constant (probability that reaction occurs given the presence of all necessary species) --immutable
+     
 
 **** TODO: Graphics class nonsense
 
 *** Problems to solve:
 **** Graphics
      - How do we keep track of how the molecules split?
-       - Maybe they always go out the same way (i.e. same angle between all)
+       - Maybe they always go out the same way (i.e. same angle between all) 
+            Sounds good
      - How do we make sure that they don't immediately collide upon splitting?
+     
      - How do we handle the speed of a reaction? Do molecules sometimes not react when the collide?
+        Yes, based on discussion with Prof. Klinge we can treat rate constant as
+            - bimolecular reaction: the probability that when the two molucules collide that the reaction will occur
+            - single molucule reaction: treat the rate constant as minimal time to elapse before a reaction can occur
+              to simplify: the reaction always takes place at the end of the time interval
+              future plans: before time elapse probability of reaction is zero, after minimal time elapse probability is greater than zero and keeps increasing utill probability is 1 or the reaction occurs
      - What, if anything, gets shown alongside the reaction as it executes?
+        nothing, we can make the reactions instantaneous
