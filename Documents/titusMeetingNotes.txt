@@ -1,0 +1,23 @@
+Notes from meeting with Titus Wed, Nov 22, 2017
+
+	TL;DR
+		write our own CRN file format and parse that instead of the Copasi output file
+		rate constant = 0<= p <= 1 for 2-molecule reaction that a reaction will happen when molecules colide
+					  = minimum time that must elapse before reaction for 1-molecule reaction
+		don't deal with reactions with more than 2 molecules
+
+	Parser: "don't write our own parser, that sounds like torture" -Titus
+		nokogiri: premade parser that Titus suggested to parse the Copasi output file
+			or
+		create our own format for CRN's and parse them with ease
+			because copasi output file has lots of information that we will not need to use 
+	
+	Regarding Rate Constants: 
+		for two molucule reactions the r.c. should be a propability that a reaction takes place when the necessary reactants colide
+		for sigle molucule reactions the r.c. is a minimum time that must elapse before a reaction
+			to begin with, we can program the reaction to take place immediatley after this time inteval
+			if we can, make it so that the probability after this time interval is greater than zero and keeps increasing untill it hits 1 or the reaction happens
+			
+	Only deal with 1 and 2 molucule reactions
+	
+	if multiple reactions have the same inputs and those inputs colide, randomly choose a reaction from the possible reactions 
