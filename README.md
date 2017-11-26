@@ -7,7 +7,7 @@ Takes in `.cps` files from COPASI
 
 ### Linux
 
-1. Install Ruby (`apt-get install ruby` or `your-esoteric-pkg-manager install-command-ruby ruby`)
+1. Install Ruby (`apt-get install ruby` or `your-esoteric-pkg-manager install-command ruby`)
 2. Install Bundler `gem install bundler`
 3. Run: `git clone https://github.com/YourFin/Chemical-reaction-network-visualizer.git`
 4. `cd` into the cloned directory
