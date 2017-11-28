@@ -17,8 +17,7 @@ TimeLine:
 		Carol & Liat have better understanding of ruby
 		Sample Mock up of program (see below)
 		Read and write
-		Box with circles ( movement if possible)
-		Test at bottom (not necessarily updating) 
+		have either reactions or reactants at the bottom of the program window
 	Dec 4 (Mon):
 		Project write up and final project done
 	Dec 6 (Fri):
