@@ -28,10 +28,16 @@
      - _dict_ counts -- Dict with a new _int_ at every frame where the count of this species changes for graphing purposes
      - _list[molecule]_ molecules -- a list of all molecules that are a part of this species at any point in time
      - Null is not needed - just say things go to nothing
-**** Reaction:
-     - _dict_ inputs -- Keys: species names; Values: count      what is this the count of? the necessary number of each of the species liested in the key?
-     - _dict_ outputs -- Keys: species names; Values: count     same as above
+**** CRN:
+     - Keep track of the reaction network
+     - _list[molecule] -- current molecules we have -- mutable
+     - _list[species] -- current species we have -- mutable
+     - _dict_ reactions --dictionary of reactions -- mutable
      
+     **** Reaction dictionary:
+          - _list[str_name]_ --list of names for reactants
+          - _list[_point_ rateConstant, list[str_name]] --rate constant and list of names of products
+   
 
 **** TODO: Graphics class nonsense
 
