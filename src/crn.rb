@@ -6,6 +6,7 @@ class CRN
   def initialize()
     @species_list = []
     @molecules = []
+    @reactions = {}
   end
 end
 
