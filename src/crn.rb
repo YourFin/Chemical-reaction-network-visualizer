@@ -24,8 +24,12 @@ end
   # - name: name of the species
   # - initinal_count: the initial number of this species
   # - color: the color of this species; randomly obtained from Gosu
+  # - species_count: a running list of the count of each species - for the purpose of recreating the simmulation
 class Species
   def initialize(name, inital_count, color = Gosu::Color.from_hsv(Random.rand(360), 1, 1))
+  end
+  def initialize()
+    @species_count = []
   end
 end
 
