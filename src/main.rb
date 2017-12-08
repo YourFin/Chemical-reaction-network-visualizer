@@ -3,8 +3,8 @@ require 'gosu'
 
 class VisualizerWindow < Gosu::Window
 
-  attr_reader : CRN
-  attr_reader : Species
+#  attr_reader : CRN
+#  attr_reader : Species
 
   def initialize
     super 640, 480
