@@ -11,6 +11,7 @@ require 'gosu'
   #              key: list of reactants
   #              value: list containting rate constant and a list of the output(s) of the reactions             
 class CRN
+  attr_accessor :species_list, :molecules, :reactions
   def initialize()
     @species_list = []
     @molecules = []
@@ -26,10 +27,15 @@ end
   # - color: the color of this species; randomly obtained from Gosu
   # - species_count: a running list of the count of each species - for the purpose of recreating the simmulation
 class Species
-  def initialize(name, inital_count, color = Gosu::Color.from_hsv(Random.rand(360), 1, 1))
-  end
-  def initialize()
+  attr_accessor :name, :initial_count, :color, :species_count
+  def initialize(name, initial_count, color = Gosu::Color.from_hsv(Random.rand(360), 1, 1))
+    @name = name
+    @initial_count = initial_count
+    @color = color
     @species_count = []
+  end
+  def to_s()
+    return "#<Species name: #{@name}, count: #{@initial_count}>"
   end
 end
 
