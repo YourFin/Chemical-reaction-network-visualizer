@@ -9,8 +9,9 @@ class VisualizerWindow < Gosu::Window
 
 		margin = 20
 
- 		@ballA = Molecule.new( 400, 400, { :x => -3, :y => 0 } )
+ 		@ballA = Molecule.new( 300, 375, { :x => -3, :y => 0 } )
 		@ballB = Molecule.new( 50, 400, { :x => 3, :y => 0 } ) 
+		@balls = [@ballA, @ballB]
 
 	        @score = [0, 0]
 		@font = Gosu::Font.new(20)
@@ -24,32 +25,37 @@ class VisualizerWindow < Gosu::Window
 		end
    	end
 
-	
+	def update_h(balls)
+		for molecule in balls do
+		   molecule.update
+		end
+	end
+
+	def colliWall_h(balls)
+		for molecule in balls do
+		   if molecule.x <= 0 || molecule.right >= self.width
+		  	 molecule.reflect_horizontal
+		   elsif molecule.y <= 0 || molecule.y > self.height
+		   	molecule.reflect_vertical
+		   end
+		end
+	end	
+
+	def colliBall_h(balls)
+		for molecule in balls do 
+			for mol_col_chk in balls.select { |mol| mol != molecule } do
+		   		if mol_col_chk.collide?(molecule)
+					molecule.reflect_horizontal
+					mol_col_chk.reflect_horizontal
+				end
+			end
+		end
+	end
 
 	def update
-		@ballA.update
-		@ballB.update
-
-		if @ballA.collide?(@ballB)
-		   @ballA.reflect_horizontal
-		   @ballB.reflect_horizontal
-		elsif @ballA.x <= 0
-		   @ballA.reflect_horizontal
-		elsif @ballA.right >= self.width
-		   @ballA.reflect_horizontal
-		elsif @ballA.y <= 0
-		   @ballA.reflect_vertical
-		elsif @ballA.y > self.height
-		   @ballA.reflect_vertical
-		elsif @ballB.x <= 0
-		   @ballB.reflect_horizontal
-		elsif @ballB.right >= self.width
-		   @ballB.reflect_horizontal
-		elsif @ballB.y <= 0
-		   @ballB.reflect_vertical
-		elsif @ballB.y > self.height
-		   @ballB.reflect_vertical
-		end
+		update_h(@balls)
+		colliBall_h(@balls)
+		colliWall_h(@balls)
 	end
 
 	def draw_background
@@ -65,11 +71,16 @@ class VisualizerWindow < Gosu::Window
 		@font.draw @score[1].to_s, center_x + offset, offset, z_order
 	end
 
+	def draw_h(balls)
+		for molecule in balls do
+		   molecule.drawBall
+		end
+	end
+
 	def draw
 		draw_background
 		draw_score
-		@ballA.drawBall
-		@ballB.drawBall
+		draw_h(@balls)
 	end
 end
 
