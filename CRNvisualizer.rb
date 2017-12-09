@@ -28,6 +28,7 @@ end
 #  invalidArguments
 #end
 
+$DIVISOR = 1
 
 window = VisualizerWindow.new(crn)
 window.show

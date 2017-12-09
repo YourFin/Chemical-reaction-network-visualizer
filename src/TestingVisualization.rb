@@ -9,9 +9,18 @@ class VisualizerWindow < Gosu::Window
 
     margin = 20
     #read the CRN file and build initial balls
-    @ballA = Molecule.new( 300, 375, { :x => -3, :y => 0 } )
-    @ballB = Molecule.new( 50, 400, { :x => 3, :y => 0 } ) 
-    @balls = [@ballA, @ballB]
+    #@ballA = Molecule.new( 300, 375, { :x => -3, :y => 0 } )
+    #@ballB = Molecule.new( 50, 400, { :x => 3, :y => 0 } ) 
+    #@balls = [@ballA, @ballB]
+    @balls = []
+    for species in crn.species_list do
+      for _ in (0..species.initial_count) do
+        @balls.push Molecule.new(species, rand, rand, { :x => rand, :y => rand })
+      end
+    end
+  end
+      
+
 
     @score = [0, 0]
     @font = Gosu::Font.new(20)
@@ -176,9 +185,10 @@ class Molecule < GameObject
   # attribute
   # v: the velocity
   attr_reader :v
-  def initialize(x, y, v)
+  def initialize(species, x, y, v)
     super(x, y, WIDTH, HEIGHT)
     @v = v
+    @species = species
   end
 
   # used velocity to change the x and y position
