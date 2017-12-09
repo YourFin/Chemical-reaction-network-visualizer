@@ -1,6 +1,7 @@
 #!/bin/env ruby
 
 require 'gosu'
+require 'nokogiri'
 
 # Class
 # - CRN: defining the chemical reaction network
@@ -42,7 +43,7 @@ class CRN
       if metabolite.has_attribute?("name") then
         key_dict[metabolite.attribute("key").to_s] = metabolite.attribute("name").to_s
         retCRN.species_list.push(Species.new(
-                                   metabolite.attribute("name"),
+                                   metabolite.attribute("name").to_s,
                                    initial_state_dict[metabolite.attribute("key").to_s]))
       end
     end
