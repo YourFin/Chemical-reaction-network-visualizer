@@ -29,6 +29,7 @@ end
 #end
 
 $DIVISOR = 1
+$MAX_VELOCITY = 3
 
 window = VisualizerWindow.new(crn)
 window.show

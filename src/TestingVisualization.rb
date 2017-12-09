@@ -207,6 +207,8 @@ class Molecule < GameObject
     v[:y] = -v[:y]
   end
 
+  def split()
+
   # function to draw the ball (Molecule)
   def drawBall
     Gosu.draw_rect x, y, WIDTH, HEIGHT, @species.color
