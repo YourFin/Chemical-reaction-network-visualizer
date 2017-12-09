@@ -16,6 +16,7 @@ class VisualizerWindow < Gosu::Window
     @balls = []
     for species in crn.species_list do
       for _ in (0..species.initial_count) do
+        ballt = nil
         loop do	
           ballt = Molecule.new(species, rand(640), rand(480), 
                                { :x => rand($MAX_VELOCITY) * ((-1)**rand(2)), 
@@ -111,7 +112,7 @@ def draw
   draw_score
   draw_h(@balls)
 end
-end
+
 # class: GameObject
 # defines a object (entity with properties and actions) for the program (ie, the molecules)
 class GameObject
@@ -174,7 +175,7 @@ class GameObject
 
   # determines whether two objects have colided
   def collide?(other)
-    x_overlap = [0, [right, other.right].min - [left, other.left].max].max
+    x_overlap = [0, [right, othecrnr.right].min - [left, other.left].max].max
     y_overlap = [0, [bottom, other.bottom].min - [top, other.top].max].max
     x_overlap * y_overlap != 0
   end
@@ -221,10 +222,6 @@ class Molecule < GameObject
       Gosu.draw_rect x, y, WIDTH, HEIGHT, @species.color
     end
   end
-
-  # creates new instance of the window
-  window = VisualizerWindow.new(crn)
-  # displays the window
-  window.show
+end
 
 
