@@ -46,7 +46,7 @@ class VisualizerWindow < Gosu::Window
 			for mol_col_chk in balls.select { |mol| mol != molecule } do
 		   		if mol_col_chk.collide?(molecule)
 					molecule.reflect_horizontal
-					mol_col_chk.reflect_horizontal
+					#mol_col_chk.reflect_horizontal
 				end
 			end
 		end
