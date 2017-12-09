@@ -5,6 +5,7 @@ class VisualizerWindow < Gosu::Window
   # creates initial window with all starting molecules
   def initialize(crn)
     super 640, 480
+    @crn = crn
     self.caption = "CRN"
 
     margin = 20
@@ -15,10 +16,16 @@ class VisualizerWindow < Gosu::Window
     @balls = []
     for species in crn.species_list do
       for _ in (0..species.initial_count) do
-        @balls.push Molecule.new(species, rand, rand, { :x => rand, :y => rand })
+	loop do	
+		ballt = Molecule.new(species, rand(640), rand(480), 
+				      { :x => rand($MAX_VELOCITY) * ((-1)**rand(2)), 
+					:y => rand($MAX_VELOCITY) * ((-1)**rand(2))})
+		break if not @balls.reduce { |t, ball | ball.collide?(ballt) or t }  
+		end  
+		@balls.push ballt
+    	  end
       end
-    end
-  end
+     end
       
 
 
