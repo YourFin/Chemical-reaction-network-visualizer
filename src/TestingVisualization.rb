@@ -209,7 +209,7 @@ class Molecule < GameObject
 
   # function to draw the ball (Molecule)
   def drawBall
-    Gosu.draw_rect x, y, WIDTH, HEIGHT, Gosu::Color::RED
+    Gosu.draw_rect x, y, WIDTH, HEIGHT, @species.color
   end
 end
 
