@@ -2,6 +2,7 @@
 
 require 'optparse'
 require './src/crn.rb'
+require './src/TestingVisualization.rb'
 
 options = {}
 
@@ -27,3 +28,6 @@ end
 #  invalidArguments
 #end
 
+
+window = VisualizerWindow.new(crn)
+window.show

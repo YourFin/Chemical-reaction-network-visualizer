@@ -97,7 +97,3 @@ end
   # - x_vel: the velocity in the x direction
   # - y_vel: the velocity in the y direction
   # - bouncelist: a list logging all of molecules bouncing off of the walls of the container and their new angle
-class Molecule
-  def initialize(x_pos, y_pos, x_vel, y_vel, species, bouncelist=[])
-  end
-end

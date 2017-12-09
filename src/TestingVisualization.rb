@@ -2,102 +2,102 @@
 require 'gosu'
 
 class VisualizerWindow < Gosu::Window
-	# creates initial window with all starting molecules
-	def initialize
-		super 640, 480
-		self.caption = "CRN"
+  # creates initial window with all starting molecules
+  def initialize(crn)
+    super 640, 480
+    self.caption = "CRN"
 
-		margin = 20
-		#read the CRN file and build initial balls
- 		@ballA = Molecule.new( 300, 375, { :x => -3, :y => 0 } )
-		@ballB = Molecule.new( 50, 400, { :x => 3, :y => 0 } ) 
-		@balls = [@ballA, @ballB]
+    margin = 20
+    #read the CRN file and build initial balls
+    @ballA = Molecule.new( 300, 375, { :x => -3, :y => 0 } )
+    @ballB = Molecule.new( 50, 400, { :x => 3, :y => 0 } ) 
+    @balls = [@ballA, @ballB]
 
-	        @score = [0, 0]
-		@font = Gosu::Font.new(20)
-		@counter = 0
-	end
-	
-	# code to close window when esc key pressed
-	def button_down(id)
-		case id
-		when Gosu::KbEscape
-			close
-		end
-   	end
+    @score = [0, 0]
+    @font = Gosu::Font.new(20)
+    @counter = 0
+  end
+  
+  # code to close window when esc key pressed
+  def button_down(id)
+    case id
+    when Gosu::KbEscape
+      close
+    end
+  end
 
-	#function call to update the balls each frame update
-		# molecules actions include: moving, reacting, bouncing (off walls or other molecules)
-	def update_h(balls)
-		for molecule in balls do
-		   molecule.update
-		end
-	end
+  #function call to update the balls each frame update
+  # molecules actions include: moving, reacting, bouncing (off walls or other molecules)
+  def update_h(balls)
+    for molecule in balls do
+      molecule.update
+    end
+  end
 
-	# changes velcoity for when molecules bounce off of walls
-	def colliWall_h(balls)
-		for molecule in balls do
-		   if molecule.x <= 0 || molecule.right >= self.width
-		  	 molecule.reflect_horizontal
-		   elsif molecule.y <= 0 || molecule.y > self.height
-		   	molecule.reflect_vertical
-		   end
-		end
-	end	
-	
-	# action to be taken when molecules colide and bounce
-	def colliBall_h(balls)
-		for molecule in balls do 
-			#
-			for mol_col_chk in balls.select { |mol| mol != molecule } do
-		   		if mol_col_chk.collide?(molecule)
-					#molecule.reflect_horizontal
-					balls.delete(molecule)
-					balls.delete(mol_col_chk)
-					
-				end
-			end
-		end
-	end
-	
-	# calls individual update functions to move the balls, check for wall colisions, and check for collisions between molecules
-	def update
-		update_h(@balls)
-		colliBall_h(@balls)
-		colliWall_h(@balls)
-	end
+  # changes velcoity for when molecules bounce off of walls
+  def colliWall_h(balls)
+    for molecule in balls do
+      if molecule.x <= 0 || molecule.right >= self.width
+        molecule.reflect_horizontal
+      elsif molecule.y <= 0 || molecule.y > self.height
+        molecule.reflect_vertical
+      end
+    end
+  end	
+  
+  # action to be taken when molecules colide and bounce
+  def colliBall_h(balls)
+    for molecule in balls do 
+      #
+      for mol_col_chk in balls.select { |mol| mol != molecule } do
+        if mol_col_chk.collide?(molecule)
+          #molecule.reflect_horizontal
+          balls.delete(molecule)
+          balls.delete(mol_col_chk)
+          
+        end
+      end
+    end
+  end
+  
+  # calls individual update functions to move the balls, check for wall colisions, and check for collisions between molecules
+  def update
+    update_h(@balls)
+    colliBall_h(@balls)
+    colliWall_h(@balls)
+  end
 
-	# draws the background of the visualizer
-	def draw_background
-		Gosu.draw_rect 0, 0, self.width, self.height, Gosu::Color::BLACK
-	end
+  # draws the background of the visualizer
+  def draw_background
+    Gosu.draw_rect 0, 0, self.width, self.height, Gosu::Color::BLACK
+  end
 
-	# draws a score (to be changed)
-	def draw_score
-		center_x = self.width / 2
-		offset = 15
-		char_width = 10
-		z_order = 100
-		@font.draw @score[0].to_s, center_x - offset - char_width, offset, z_order
-		@font.draw @score[1].to_s, center_x + offset, offset, z_order
-	end
+  # draws a score (to be changed)
+  def draw_score
+    center_x = self.width / 2
+    offset = 15
+    char_width = 10
+    z_order = 100
+    @font.draw @score[0].to_s, center_x - offset - char_width, offset, z_order
+    @font.draw @score[1].to_s, center_x + offset, offset, z_order
+  end
 
-	# draws the balls (AKA molecules)
-	def draw_h(balls)
-		for molecule in balls do
-		   molecule.drawBall
-		end
-	end
+  # draws the balls (AKA molecules)
+  def draw_h(balls)
+    for molecule in balls do
+      molecule.drawBall
+    end
+  end
 
-	# calls the individual draw functions for the background, balls (molecules), and score
-	def draw
-		draw_background
-		draw_score
-		draw_h(@balls)
-	end
+  # calls the individual draw functions for the background, balls (molecules), and score
+  def draw
+    draw_background
+    draw_score
+    draw_h(@balls)
+  end
 end
 # class: GameObject
-	# defines a object (entity with properties and actions) for the program (ie, the molecules)
+# defines a object (entity with properties and actions) for the program (ie, the molecules)
 class GameObject
   attr_accessor :x
   attr_accessor :y
@@ -105,10 +105,10 @@ class GameObject
   attr_accessor :h
 
   # parameters
-	# x: x value of upper right hand side of object
-	# y: y value of upper right hand side of object
-	# w: width
-	# h: height
+  # x: x value of upper right hand side of object
+  # y: y value of upper right hand side of object
+  # w: width
+  # h: height
   def initialize(x, y, w, h)
     @x = x
     @y = y
@@ -125,7 +125,7 @@ class GameObject
   end
 
   # purpose
-	# calculate x coordinate of the left side of object by subtracting the width from the right most x value
+  # calculate x coordinate of the left side of object by subtracting the width from the right most x value
   def right=(r)
     self.x = r - w
   end
@@ -135,7 +135,7 @@ class GameObject
   end
 
   # purpose
-	# calculate uppermost coordinate by subtracting the width from the right most x value
+  # calculate uppermost coordinate by subtracting the width from the right most x value
   def top=(t)
     self.y = t
   end
@@ -165,16 +165,16 @@ class GameObject
 end
 
 # To Do:
-	#change how color is chosen
-	#change how reflection is determined
-	#make the starting x and y random
-	#make initial velocity random
+#change how color is chosen
+#change how reflection is determined
+#make the starting x and y random
+#make initial velocity random
 class Molecule < GameObject
   WIDTH = 50
   HEIGHT = 50
 
   # attribute
-	# v: the velocity
+  # v: the velocity
   attr_reader :v
   def initialize(x, y, v)
     super(x, y, WIDTH, HEIGHT)
@@ -189,7 +189,7 @@ class Molecule < GameObject
 
   # used in colitions: to change x direction by 180 degrees
   def reflect_horizontal
-     v[:x] = -v[:x]
+    v[:x] = -v[:x]
   end
 
   # used in colitions: to change y direction by 180 degrees
@@ -204,7 +204,7 @@ class Molecule < GameObject
 end
 
 # creates new instance of the window
-window = VisualizerWindow.new
+window = VisualizerWindow.new(crn)
 # displays the window
 window.show
 
