@@ -28,8 +28,9 @@ end
 #  invalidArguments
 #end
 
-$DIVISOR = 1
+$DIVISOR = 100000000000000000000000000000000000000000000000000000000000000000
 $MAX_VELOCITY = 3
 
 window = VisualizerWindow.new(crn)
 window.show
+window.draw
