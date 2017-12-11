@@ -69,18 +69,28 @@ def colliWall_h(balls)
   end
 end	
 
+ 
+
+
 # action to be taken when molecules colide and bounce
 def colliBall_h(balls)
   for molecule in balls do 
     #
     for mol_col_chk in balls.select { |mol| mol != molecule } do
       if mol_col_chk.collide?(molecule)
-        if @crn.reactions.key?([molecule, mol_col_chk])
+        if @crn.reactions.key?([molecule.species, mol_col_chk.species]) && !molecule.noCollideList.include?(mol_col_chk)
           balls.delete(molecule)
           balls.delete(mol_col_chk)
-          
+          products = @crn.reactions[[molecule.species, mol_col_chk.species]][1]
+          for product in products do            
+            mol = Molecule.new(product, mol_col_chk.x, mol_col_chk.y, 
+                              { :x => rand($MAX_VELOCITY) * ((-1)**rand(2)), 
+                                :y => rand($MAX_VELOCITY) * ((-1)**rand(2))}, products.select{ |prod| product != prod })
+            balls.push(mol)
+          end
         else
-          #bounce
+          molecule.noCollideList = molecule.noCollideList - [mol_col_chk]
+          mol_col_chk.noCollideList = mol_col_chk.noCollideList - [molecule]
         end
       end
     end
@@ -206,14 +216,16 @@ end
 class Molecule < GameObject
   WIDTH = 50
   HEIGHT = 50
+  attr_accessor :noCollideList, :species
 
   # attribute
   # v: the velocity
   attr_reader :v
-  def initialize(species, x, y, v)
+  def initialize(species, x, y, v, noCollideList = [])
     super(x, y, WIDTH, HEIGHT)
     @v = v
     @species = species
+    @noCollideList = noCollideList
   end
 
   # used velocity to change the x and y position
@@ -233,6 +245,7 @@ class Molecule < GameObject
   end
 
   def split()
+
   end
 
   # function to draw the ball (Molecule)
@@ -241,5 +254,3 @@ class Molecule < GameObject
     Gosu.draw_rect x, y, WIDTH, HEIGHT, @species.color
   end
 end
-
-
