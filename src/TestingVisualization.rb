@@ -16,11 +16,11 @@ class VisualizerWindow < Gosu::Window
     @balls = []
     small = crn.species_list.reduce { | old, nn |  (nn.initial_count < old.initial_count && nn.initial_count > 0.0 ) ? nn : old }.initial_count
     puts small
-    for species in crn.species_list do
+    for species in crn.species_list
       species.initial_count = (species.initial_count / small * $NUM_MIN).floor
-      for ii in (0..species.initial_count) do
+      for ii in (0..species.initial_count)
         ballt = nil
-        loop do	
+        loop do
           ballt = Molecule.new(species, rand(640), rand(480), 
                                { :x => rand($MAX_VELOCITY) * ((-1)**rand(2)), 
                                  :y => rand($MAX_VELOCITY) * ((-1)**rand(2))})
@@ -31,10 +31,12 @@ class VisualizerWindow < Gosu::Window
               break
             end
           end
-          break if doWeBreak  
-        end  
-        @balls.push ballt
+          if doWeBreak
+            break
+          end
+        end
       end
+      @balls.push ballt
     end
     @score = [0, 0]
     @font = Gosu::Font.new(20)
@@ -52,14 +54,14 @@ class VisualizerWindow < Gosu::Window
   #function call to update the balls each frame update
   # molecules actions include: moving, reacting, bouncing (off walls or other molecules)
   def update_h(balls)
-    for molecule in balls do
+    for molecule in balls
       molecule.update
     end
   end
 
   # changes velcoity for when molecules bounce off of walls
   def colliWall_h(balls)
-    for molecule in balls do
+    for molecule in balls
       if molecule.x <= 0 || molecule.right >= self.width
         molecule.reflect_horizontal
       elsif molecule.y <= 0 || molecule.y > self.height
@@ -70,8 +72,8 @@ class VisualizerWindow < Gosu::Window
 
   # action to be taken when molecules colide and bounce
   def colliBall_h(balls)
-    for molecule in balls do 
-      for mol_col_chk in balls.select { |mol| mol != molecule } do
+    for molecule in balls
+      for mol_col_chk in balls.select { |mol| mol != molecule }
         if mol_col_chk.collide?(molecule)
           if @crn.reactions.key?([molecule.species, mol_col_chk.species]) 
             if !molecule.noCollideList.include?(mol_col_chk)
@@ -79,7 +81,7 @@ class VisualizerWindow < Gosu::Window
               balls.delete(mol_col_chk)
 
               products = @crn.reactions[[molecule.species, mol_col_chk.species]][1]
-              for product in products do
+              for product in products
                 mol = Molecule.new(product, mol_col_chk.x, mol_col_chk.y,
                                    { :x => rand($MAX_VELOCITY) * ((-1)**rand(2)),
                                      :y => rand($MAX_VELOCITY) * ((-1)**rand(2))}, products.select{ |prod| product != prod })
@@ -103,48 +105,48 @@ class VisualizerWindow < Gosu::Window
 
 
 
-    # calls individual update functions to move the balls, check for wall colisions, and check for collisions between molecules
-    def update
-      puts "update"
-      update_h(@balls)
-      colliBall_h(@balls)
-      colliWall_h(@balls)
-    end
+  # calls individual update functions to move the balls, check for wall colisions, and check for collisions between molecules
+  def update
+    puts "update"
+    update_h(@balls)
+    colliBall_h(@balls)
+    colliWall_h(@balls)
+  end
 
-    # draws the background of the visualizer
-    def draw_background
-      puts "awe"
-      Gosu.draw_rect 0, 0, self.width, self.height, Gosu::Color::BLACK
-      puts "all"
-    end
+  # draws the background of the visualizer
+  def draw_background
+    puts "awe"
+    Gosu.draw_rect 0, 0, self.width, self.height, Gosu::Color::BLACK
+    puts "all"
+  end
 
-    # draws a score (to be changed)
-    def draw_score
-      center_x = self.width / 2
-      offset = 15
-      char_width = 10
-      z_order = 100
-      @font.draw @score[0].to_s, center_x - offset - char_width, offset, z_order
-      @font.draw @score[1].to_s, center_x + offset, offset, z_order
-    end
+  # draws a score (to be changed)
+  def draw_score
+    center_x = self.width / 2
+    offset = 15
+    char_width = 10
+    z_order = 100
+    @font.draw @score[0].to_s, center_x - offset - char_width, offset, z_order
+    @font.draw @score[1].to_s, center_x + offset, offset, z_order
+  end
 
-    # draws the balls (AKA molecules)
-    def draw_h(balls)
-      puts "orange"
-      for molecule in  balls do
-        molecule.drawBall
-      end
-    end
-
-    # calls the individual draw functions for the background, balls (molecules), and score
-    def draw
-      puts "potato"
-      draw_background
-      puts "apple"
-      draw_score
-      draw_h(@balls)
+  # draws the balls (AKA molecules)
+  def draw_h(balls)
+    puts "orange"
+    for molecule in balls
+      molecule.drawBall
     end
   end
+
+  # calls the individual draw functions for the background, balls (molecules), and score
+  def draw
+    puts "potato"
+    draw_background
+    puts "apple"
+    draw_score
+    draw_h(@balls)
+  end
+end
 end
 
 # class: GameObject
