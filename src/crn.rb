@@ -42,10 +42,10 @@ class CRN
     key_dict = {}
     for metabolite in (doc.xpath('//xmlns:Model[@type="deterministic"]').first > "ListOfMetabolites").children do
       if metabolite.has_attribute?("name") then
-        key_dict[metabolite.attribute("key").to_s] = metabolite.attribute("name").to_s
-        retCRN.species_list.push(Species.new(
-                                   metabolite.attribute("name").to_s,
-                                   initial_state_dict[metabolite.attribute("key").to_s]))
+        spec = Species.new(metabolite.attribute("name").to_s,
+                           initial_state_dict[metabolite.attribute("key").to_s])
+        key_dict[metabolite.attribute("key").to_s] = spec
+        retCRN.species_list.push(spec)
       end
     end
 
@@ -85,7 +85,7 @@ class Species
     @color = color
     @species_count = []
   end
-  def to_s()
+  def to_str()
     return "#<Species name: #{@name}, count: #{@initial_count}>"
   end
 end

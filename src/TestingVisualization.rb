@@ -42,6 +42,7 @@ class VisualizerWindow < Gosu::Window
     @score = [0, 0]
     @font = Gosu::Font.new(20)
     @counter = 0
+    puts crn.reactions
   end
 
   # code to close window when esc key pressed
@@ -76,9 +77,9 @@ class VisualizerWindow < Gosu::Window
     for molecule, mol_col_chk in balls.combination(2)
         if mol_col_chk.collide?(molecule) && (! molecule.noCollideList.include?(mol_col_chk))
           if @crn.reactions.key?([molecule.species, mol_col_chk.species]) 
+            puts "I AM FUCKING REACTING"
               balls.delete(molecule)
               balls.delete(mol_col_chk)
-
               products = @crn.reactions[[molecule.species, mol_col_chk.species]][1]
               for product in products
                 mol = Molecule.new(product, mol_col_chk.x, mol_col_chk.y,
@@ -88,7 +89,6 @@ class VisualizerWindow < Gosu::Window
               end #for
           else  
           #bounce around when it is not a reaction
-            puts "#{molecule.x}, #{molecule.y}, #{mol_col_chk.x}, #{mol_col_chk.y}, #{molecule.v}"
             temp = Marshal.load(Marshal.dump(molecule.v))
             molecule.v = Marshal.load(Marshal.dump(mol_col_chk.v))
             mol_col_chk.v = temp
