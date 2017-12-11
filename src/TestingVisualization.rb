@@ -102,6 +102,7 @@ class VisualizerWindow < Gosu::Window
 
 
 
+
     # calls individual update functions to move the balls, check for wall colisions, and check for collisions between molecules
     def update
       puts "update"
@@ -144,120 +145,121 @@ class VisualizerWindow < Gosu::Window
       draw_h(@balls)
     end
   end
+end
 
-  # class: GameObject
-  # defines a object (entity with properties and actions) for the program (ie, the molecules)
-  class GameObject
-    attr_accessor :x
-    attr_accessor :y
-    attr_accessor :w
-    attr_accessor :h
+# class: GameObject
+# defines a object (entity with properties and actions) for the program (ie, the molecules)
+class GameObject
+  attr_accessor :x
+  attr_accessor :y
+  attr_accessor :w
+  attr_accessor :h
 
-    # parameters
-    # x: x value of upper right hand side of object
-    # y: y value of upper right hand side of object
-    # w: width
-    # h: height
-    def initialize(x, y, w, h)
-      @x = x
-      @y = y
-      @w = w
-      @h = h
-    end
-
-    def left
-      x
-    end
-
-    def right
-      x + w
-    end
-
-    # purpose
-    # calculate x coordinate of the left side of object by subtracting the width from the right most x value
-    def right=(r)
-      self.x = r - w
-    end
-
-    def top
-      y
-    end
-
-    # purpose
-    # calculate uppermost coordinate by subtracting the width from the right most x value
-    def top=(t)
-      self.y = t
-    end
-
-    def bottom
-      y + h
-    end
-
-    def center_y
-      y + h/2
-    end
-
-    def center_x
-      x + x/2
-    end
-
-    def bottom=(b)
-      self.y = b - h
-    end
-
-    # determines whether two objects have colided
-    def collide?(other)
-      x_overlap = [0, [right, other.right].min - [left, other.left].max].max
-      y_overlap = [0, [bottom, other.bottom].min - [top, other.top].max].max
-      x_overlap * y_overlap != 0
-    end
+  # parameters
+  # x: x value of upper right hand side of object
+  # y: y value of upper right hand side of object
+  # w: width
+  # h: height
+  def initialize(x, y, w, h)
+    @x = x
+    @y = y
+    @w = w
+    @h = h
   end
 
-  # To Do:
-  #change how color is chosen
-  #change how reflection is determined
-  #make the starting x and y random
-  #make initial velocity random
-  class Molecule < GameObject
-    WIDTH = $BALL_SIZE
-    HEIGHT = $BALL_SIZE
-
-    attr_accessor :noCollideList
-
-    # attribute
-    # v: the velocity
-    attr_reader :v, :species
-    def initialize(species, x, y, noCollideList = [])
-      super(x, y, WIDTH, HEIGHT)
-      @v = v
-      @species = species
-      @noCollideList = noCollideList
-    end
-
-    # used velocity to change the x and y position
-    def update
-      self.x += v[:x]
-      self.y += v[:y]
-    end
-
-    # used in colitions: to change x direction by 180 degrees
-    def reflect_horizontal
-      v[:x] = -v[:x]
-    end
-
-    # used in colitions: to change y direction by 180 degrees
-    def reflect_vertical
-      v[:y] = -v[:y]
-    end
-
-    def split()
-    end
-
-    # function to draw the ball (Molecule)
-    def drawBall
-      puts @species.color
-      Gosu.draw_rect x, y, WIDTH, HEIGHT, @species.color
-    end
+  def left
+    x
   end
+
+  def right
+    x + w
+  end
+
+  # purpose
+  # calculate x coordinate of the left side of object by subtracting the width from the right most x value
+  def right=(r)
+    self.x = r - w
+  end
+
+  def top
+    y
+  end
+
+  # purpose
+  # calculate uppermost coordinate by subtracting the width from the right most x value
+  def top=(t)
+    self.y = t
+  end
+
+  def bottom
+    y + h
+  end
+
+  def center_y
+    y + h/2
+  end
+
+  def center_x
+    x + x/2
+  end
+
+  def bottom=(b)
+    self.y = b - h
+  end
+
+  # determines whether two objects have colided
+  def collide?(other)
+    x_overlap = [0, [right, other.right].min - [left, other.left].max].max
+    y_overlap = [0, [bottom, other.bottom].min - [top, other.top].max].max
+    x_overlap * y_overlap != 0
+  end
+end
+
+# To Do:
+#change how color is chosen
+#change how reflection is determined
+#make the starting x and y random
+#make initial velocity random
+class Molecule < GameObject
+  WIDTH = $BALL_SIZE
+  HEIGHT = $BALL_SIZE
+
+  attr_accessor :noCollideList
+
+  # attribute
+  # v: the velocity
+  attr_reader :v, :species
+  def initialize(species, x, y, noCollideList = [])
+    super(x, y, WIDTH, HEIGHT)
+    @v = v
+    @species = species
+    @noCollideList = noCollideList
+  end
+
+  # used velocity to change the x and y position
+  def update
+    self.x += v[:x]
+    self.y += v[:y]
+  end
+
+  # used in colitions: to change x direction by 180 degrees
+  def reflect_horizontal
+    v[:x] = -v[:x]
+  end
+
+  # used in colitions: to change y direction by 180 degrees
+  def reflect_vertical
+    v[:y] = -v[:y]
+  end
+
+  def split()
+  end
+
+  # function to draw the ball (Molecule)
+  def drawBall
+    puts @species.color
+    Gosu.draw_rect x, y, WIDTH, HEIGHT, @species.color
+  end
+end
 
 
