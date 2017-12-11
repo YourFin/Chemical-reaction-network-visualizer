@@ -75,9 +75,8 @@ class VisualizerWindow < Gosu::Window
   def colliBall_h(balls)
     for molecule in balls
       for mol_col_chk in balls.select { |mol| mol != molecule }
-        if mol_col_chk.collide?(molecule)
+        if mol_col_chk.collide?(molecule) && (! molecule.noCollideList.include?(mol_col_chk))
           if @crn.reactions.key?([molecule.species, mol_col_chk.species]) 
-            if !molecule.noCollideList.include?(mol_col_chk)
               balls.delete(molecule)
               balls.delete(mol_col_chk)
 
@@ -88,12 +87,12 @@ class VisualizerWindow < Gosu::Window
                                      :y => rand($MAX_VELOCITY) * ((-1)**rand(2))}, products.select{ |prod| product != prod })
                 balls.push(mol)
               end #for
-            end
-          else
-            #bounce around when it is not a reaction
+          else  
+          #bounce around when it is not a reaction
+            puts "#{molecule.x}, #{molecule.y}, #{mol_col_chk.x}, #{mol_col_chk.y}"
             temp = molecule.v
             molecule.v = mol_col_chk.v
-            mol_col_chk.v = temp 
+            mol_col_chk.v = temp
           end #no coList
         else
           molecule.noCollideList = molecule.noCollideList - [mol_col_chk]
@@ -108,17 +107,14 @@ class VisualizerWindow < Gosu::Window
 
   # calls individual update functions to move the balls, check for wall colisions, and check for collisions between molecules
   def update
-    puts "update"
-    update_h(@balls)
     colliBall_h(@balls)
+    update_h(@balls)
     colliWall_h(@balls)
   end
 
   # draws the background of the visualizer
   def draw_background
-    puts "awe"
     Gosu.draw_rect 0, 0, self.width, self.height, Gosu::Color::BLACK
-    puts "all"
   end
 
   # draws a score (to be changed)
@@ -133,7 +129,6 @@ class VisualizerWindow < Gosu::Window
 
   # draws the balls (AKA molecules)
   def draw_h(balls)
-    puts "orange"
     for molecule in balls
       molecule.drawBall
     end
@@ -141,9 +136,7 @@ class VisualizerWindow < Gosu::Window
 
   # calls the individual draw functions for the background, balls (molecules), and score
   def draw
-    puts "potato"
     draw_background
-    puts "apple"
     draw_score
     draw_h(@balls)
   end
@@ -211,9 +204,11 @@ class GameObject
 
   # determines whether two objects have colided
   def collide?(other)
-    x_overlap = [0, [right, other.right].min - [left, other.left].max].max
-    y_overlap = [0, [bottom, other.bottom].min - [top, other.top].max].max
-    return x_overlap * y_overlap != 0
+    max_left = [left, other.left].max
+    max_top = [top, other.top].max
+    min_right = [right,other.right].min
+    min_bottom = [bottom,other.bottom].min
+    return max_left <= min_right && max_top <= min_bottom
   end
 end
 
@@ -229,27 +224,27 @@ class Molecule < GameObject
   # attribute
   # v: the velocity
   attr_accessor :v, :species
-  def initialize(species, x, y, v, noCollideList = [])
+  def initialize(species, x, y, vv, noCollideList = [])
     super(x, y, $BALL_SIZE, $BALL_SIZE)
-    @v = v
+    @v = vv
     @species = species
     @noCollideList = noCollideList
   end
 
   # used velocity to change the x and y position
   def update
-    self.x += v[:x]
-    self.y += v[:y]
+    self.x += self.v[:x]
+    self.y += self.v[:y]
   end
 
   # used in colitions: to change x direction by 180 degrees
   def reflect_horizontal
-    v[:x] = -v[:x]
+    self.v[:x] = -self.v[:x]
   end
 
   # used in colitions: to change y direction by 180 degrees
   def reflect_vertical
-    v[:y] = -v[:y]
+    self.v[:y] = -self.v[:y]
   end
 
   def split()
@@ -257,8 +252,7 @@ class Molecule < GameObject
 
   # function to draw the ball (Molecule)
   def drawBall
-    puts @species.color
-    Gosu.draw_rect x, y, $BALL_SIZE, $BALL_SIZE, @species.color
+    Gosu.draw_rect @x, @y, $BALL_SIZE, $BALL_SIZE, @species.color
   end
 end
 
