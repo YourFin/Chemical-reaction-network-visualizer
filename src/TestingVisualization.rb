@@ -147,7 +147,6 @@ class VisualizerWindow < Gosu::Window
     draw_h(@balls)
   end
 end
-end
 
 # class: GameObject
 # defines a object (entity with properties and actions) for the program (ie, the molecules)
