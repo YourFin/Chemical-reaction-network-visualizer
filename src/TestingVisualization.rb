@@ -65,7 +65,7 @@ class VisualizerWindow < Gosu::Window
     for molecule in balls
       if molecule.x <= 0 || molecule.right >= self.width
         molecule.reflect_horizontal
-      elsif molecule.y <= 0 || molecule.y > self.height
+      elsif molecule.y <= 0 || molecule.bottom >= self.height
         molecule.reflect_vertical
       end
     end
@@ -73,8 +73,7 @@ class VisualizerWindow < Gosu::Window
 
   # action to be taken when molecules colide and bounce
   def colliBall_h(balls)
-    for molecule in balls
-      for mol_col_chk in balls.select { |mol| mol != molecule }
+    for molecule, mol_col_chk in balls.combination(2)
         if mol_col_chk.collide?(molecule) && (! molecule.noCollideList.include?(mol_col_chk))
           if @crn.reactions.key?([molecule.species, mol_col_chk.species]) 
               balls.delete(molecule)
@@ -89,16 +88,15 @@ class VisualizerWindow < Gosu::Window
               end #for
           else  
           #bounce around when it is not a reaction
-            puts "#{molecule.x}, #{molecule.y}, #{mol_col_chk.x}, #{mol_col_chk.y}"
-            temp = molecule.v
-            molecule.v = mol_col_chk.v
+            puts "#{molecule.x}, #{molecule.y}, #{mol_col_chk.x}, #{mol_col_chk.y}, #{molecule.v}"
+            temp = Marshal.load(Marshal.dump(molecule.v))
+            molecule.v = Marshal.load(Marshal.dump(mol_col_chk.v))
             mol_col_chk.v = temp
           end #no coList
         else
           molecule.noCollideList = molecule.noCollideList - [mol_col_chk]
           mol_col_chk.noCollideList = mol_col_chk.noCollideList - [molecule]
         end # if collide
-      end #for
     end #for
   end
 
@@ -107,8 +105,9 @@ class VisualizerWindow < Gosu::Window
 
   # calls individual update functions to move the balls, check for wall colisions, and check for collisions between molecules
   def update
-    colliBall_h(@balls)
     update_h(@balls)
+    colliBall_h(@balls)
+
     colliWall_h(@balls)
   end
 
@@ -246,6 +245,8 @@ class Molecule < GameObject
   def reflect_vertical
     self.v[:y] = -self.v[:y]
   end
+
+
 
   def split()
   end
