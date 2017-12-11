@@ -29,8 +29,9 @@ OptionParser.new do |opts|
     invalidArguments if nn < 1
     $NUM_MIN = nn
   end
-  opts.on("-mv", "--max-velocity", Double, "The maximum velocity of a particles") do |mv|
+  opts.on("-mv", "--max-velocity", Float, "The maximum velocity of a particles") do |mv|
     
+  end
 end.parse!
 
 
