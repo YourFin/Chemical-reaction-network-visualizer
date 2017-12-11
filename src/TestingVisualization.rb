@@ -85,19 +85,22 @@ class VisualizerWindow < Gosu::Window
                                      :y => rand($MAX_VELOCITY) * ((-1)**rand(2))}, products.select{ |prod| product != prod })
                 balls.push(mol)
               end #for
-            else
-              #bounce around 
-              temp = molecule.v
-              molecule.v = mol_col_chk.v
-              mol_col_chk.v = temp 
-            end #no reaction
+            end
           else
-            molecule.noCollideList = molecule.noCollideList - [mol_col_chk]
-            mol_col_chk.noCollideList = mol_col_chk.noCollideList - [molecule]
-          end # if collide
-        end #for
+            #bounce around when it is not a reaction
+            temp = molecule.v
+            molecule.v = mol_col_chk.v
+            mol_col_chk.v = temp 
+          end #no coList
+        else
+          molecule.noCollideList = molecule.noCollideList - [mol_col_chk]
+          mol_col_chk.noCollideList = mol_col_chk.noCollideList - [molecule]
+        end # if collide
       end #for
-    end
+    end #for
+  end
+
+
 
     # calls individual update functions to move the balls, check for wall colisions, and check for collisions between molecules
     def update
@@ -219,13 +222,16 @@ class VisualizerWindow < Gosu::Window
     WIDTH = $BALL_SIZE
     HEIGHT = $BALL_SIZE
 
+    attr_accessor :noCollideList
+
     # attribute
     # v: the velocity
-    attr_reader :v
-    def initialize(species, x, y, v)
+    attr_reader :v, :species
+    def initialize(species, x, y, noCollideList = [])
       super(x, y, WIDTH, HEIGHT)
       @v = v
       @species = species
+      @noCollideList = noCollideList
     end
 
     # used velocity to change the x and y position
