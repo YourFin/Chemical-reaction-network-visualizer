@@ -4,7 +4,14 @@ require 'optparse'
 require './src/crn.rb'
 require './src/TestingVisualization.rb'
 
-options = {}
+def invalidArguments()
+  puts "Invalid arguments; try 'CRNvisualizer --help' for help"
+  exit 1
+end
+
+$MAX_VELOCITY = 3
+$BALL_SIZE = 10
+$NUM_MIN = 2
 
 OptionParser.new do |opts|
   opts.banner = "Usage: CRNvisualizer CRN_TO_VISUALIZE.cps [OPTIONS]"
@@ -14,12 +21,18 @@ OptionParser.new do |opts|
     puts opts
     exit
   end
+  opts.on("-ms", "--mol-size", Integer, "The width of a molecule, in pixels. Default 10.") do |ms|
+    invalidArguments if ms < 0
+    $BALL_SIZE = ms
+  end
+  opts.on("-n", "--num-min", Integer, "The number of molecules for the reactant with the smallest non-zero initial value. Default two.") do |nn|
+    invalidArguments if nn < 1
+    $NUM_MIN = nn
+  end
+  opts.on("-mv", "--max-velocity", Double, "The maximum velocity of a particles") do |mv|
+    
 end.parse!
 
-def invalidArguments()
-  puts "Invalid arguments; try 'CRNvisualizer --help' for help"
-  exit 1
-end
 
 #begin
   crn = CRN.parseFromCPSFile(ARGV[0])
@@ -28,9 +41,5 @@ end
 #  invalidArguments
 #end
 
-$DIVISOR = 100000000000000000000000000000000000000000000000000000000000000000
-$MAX_VELOCITY = 3
-
 window = VisualizerWindow.new(crn)
 window.show
-window.draw

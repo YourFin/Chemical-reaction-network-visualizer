@@ -3,19 +3,21 @@ require 'gosu'
 
 class VisualizerWindow < Gosu::Window
 
-#  attr_reader : CRN
-#  attr_reader : Species
+  #  attr_reader : CRN
+  #  attr_reader : Species
 
-  def initialize
+  def initialize(crn)
     super 640, 480
     self.caption = "CRN"
 
     margin = 20
 
     @ballA = Molecule.new( 100, 100, { :x => 4, :y => 4 } )
-	@ballB = Molecule.new( 50, 50, { :x => 3, :y => -3 } ) 
+    @ballB = Molecule.new( 50, 50, { :x => 3, :y => -3 } ) 
 
-#    @score = [0, 0]
+    for species in 
+
+    #    @score = [0, 0]
     @font = Gosu::Font.new(20)
     @flash = {}
     @counter = 0
@@ -33,17 +35,17 @@ class VisualizerWindow < Gosu::Window
     @ballA.update
     if @ballA.collide?(@ballB)
       @ball.reflect_horizontal
-#     increase_speed
+    #     increase_speed
     elsif @ball.collide?(@enemy)
       # play sound
       @ball.reflect_horizontal
       @blip_sound.play
       increase_speed
     elsif @ball.x <= 0
-	  @ball.reflect_horizontal #add
+      @ball.reflect_horizontal #add
       score[1] += 1
     elsif @ball.right >= self.width
-	  @ball.reflect_horizontal #add
+      @ball.reflect_horizontal #add
       score[0] += 1
 
     end
@@ -55,24 +57,24 @@ class VisualizerWindow < Gosu::Window
     @ball.v[:x] = @ball.v[:x] * 1.1
   end
 
-#  def flash_side(side)
-#    @flash[side] = true
-#  end
+  #  def flash_side(side)
+  #    @flash[side] = true
+  #  end
 
   def draw
     draw_background
 
-#    if @flash[:left]
-#      Gosu.draw_rect 0, 0, self.width / 2, self.height, Gosu::Color::RED
-#      @flash[:left] = nil
-#    end
+    #    if @flash[:left]
+    #      Gosu.draw_rect 0, 0, self.width / 2, self.height, Gosu::Color::RED
+    #      @flash[:left] = nil
+    #    end
 
-#    if @flash[:right]
-#      Gosu.draw_rect self.width / 2, 0, self.width, self.height, Gosu::Color::RED
-#      @flash[:right] = nil
-#    end
+    #    if @flash[:right]
+    #      Gosu.draw_rect self.width / 2, 0, self.width, self.height, Gosu::Color::RED
+    #      @flash[:right] = nil
+    #    end
 
-#   draw_center_line
+    #   draw_center_line
     draw_score
     @player.draw
     @enemy.draw
@@ -83,18 +85,18 @@ class VisualizerWindow < Gosu::Window
     Gosu.draw_rect 0, 0, self.width, self.height, Gosu::Color::WHITE
   end
 
-#  def draw_center_line
-#    center_x = self.width / 2
-#    segment_length = 10
-#    gap = 5
-#    color = Gosu::Color::GREEN
-#    y = 0
-#    begin
-#      draw_line center_x, y, color,
-#                center_x, y + segment_length, color
-#      y += segment_length + gap
-#    end while y < self.height
-#  end
+  #  def draw_center_line
+  #    center_x = self.width / 2
+  #    segment_length = 10
+  #    gap = 5
+  #    color = Gosu::Color::GREEN
+  #    y = 0
+  #    begin
+  #      draw_line center_x, y, color,
+  #                center_x, y + segment_length, color
+  #      y += segment_length + gap
+  #    end while y < self.height
+  #  end
 
   def draw_score
     center_x = self.width / 2
@@ -164,10 +166,10 @@ end
 
 
 # To Do:
-	#change how color is chosen
-	#change how reflection is determined
-	#make the starting x and y random
-	#make initial velocity random
+#change how color is chosen
+#change how reflection is determined
+#make the starting x and y random
+#make initial velocity random
 class Molecule < GameObject
   WIDTH = 10
   HEIGHT = 10
@@ -182,7 +184,7 @@ class Molecule < GameObject
     self.x += v[:x]
     self.y += v[:y]
   end
-	
+  
   #change so that it reflects by the reflection factor 
   def reflect_horizontal
     v[:x] = -v[:x]
@@ -198,5 +200,5 @@ class Molecule < GameObject
 end
 
 
-window = VisualizerWindow.new
-window.show
+#window = VisualizerWindow.new
+#window.show

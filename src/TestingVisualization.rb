@@ -17,8 +17,7 @@ class VisualizerWindow < Gosu::Window
     small = crn.species_list.reduce { | old, nn |  (nn.initial_count < old.initial_count && nn.initial_count > 0.0 ) ? nn : old }.initial_count
     puts small
     for species in crn.species_list do
-      species.initial_count /= small
-      species.initial_count = species.initial_count.floor
+      species.initial_count = (species.initial_count / small * $NUM_MIN).floor
       for ii in (0..species.initial_count) do
         ballt = nil
         loop do	
@@ -115,7 +114,7 @@ end
 # draws the balls (AKA molecules)
 def draw_h(balls)
   puts "orange"
-  for molecule in balls do
+  for molecule in  balls do
     molecule.drawBall
   end
 end
@@ -204,8 +203,8 @@ end
 #make the starting x and y random
 #make initial velocity random
 class Molecule < GameObject
-  WIDTH = 50
-  HEIGHT = 50
+  WIDTH = $BALL_SIZE
+  HEIGHT = $BALL_SIZE
 
   # attribute
   # v: the velocity

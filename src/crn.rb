@@ -19,6 +19,7 @@ class CRN
     @reactions = {}
   end
 
+
   def CRN.parseFromCPSFile(filename)
     doc = File.open(filename) { |f| Nokogiri::XML(f) }
     retCRN = CRN.new
@@ -70,12 +71,12 @@ class CRN
 end
 
 # Class
-  # - Species: defining the chemical reaction network
+# - Species: defining the chemical reaction network
 # Instance Variable:
-  # - name: name of the species
-  # - initinal_count: the initial number of this species
-  # - color: the color of this species; randomly obtained from Gosu
-  # - species_count: a running list of the count of each species - for the purpose of recreating the simmulation
+# - name: name of the species
+# - initinal_count: the initial number of this species
+# - color: the color of this species; randomly obtained from Gosu
+# - species_count: a running list of the count of each species - for the purpose of recreating the simmulation
 class Species
   attr_accessor :name, :initial_count, :color, :species_count
   def initialize(name, initial_count, color = Gosu::Color.from_hsv(Random.rand(360), 1, 1))
@@ -90,10 +91,10 @@ class Species
 end
 
 # Class
-  # - Molecule: defining the chemical reaction network
+# - Molecule: defining the chemical reaction network
 # Instance Variable:
-  # - x_pos: current x position
-  # - y_pos: current y position
-  # - x_vel: the velocity in the x direction
-  # - y_vel: the velocity in the y direction
-  # - bouncelist: a list logging all of molecules bouncing off of the walls of the container and their new angle
+# - x_pos: current x position
+# - y_pos: current y position
+# - x_vel: the velocity in the x direction
+# - y_vel: the velocity in the y direction
+# - bouncelist: a list logging all of molecules bouncing off of the walls of the container and their new angle
