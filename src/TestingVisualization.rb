@@ -35,8 +35,9 @@ class VisualizerWindow < Gosu::Window
             break
           end
         end
+        puts ballt.v
+        @balls.push ballt
       end
-      @balls.push ballt
     end
     @score = [0, 0]
     @font = Gosu::Font.new(20)
@@ -169,50 +170,50 @@ class GameObject
   end
 
   def left
-    x
+    @x
   end
 
   def right
-    x + w
+    @x + @w
   end
 
   # purpose
   # calculate x coordinate of the left side of object by subtracting the width from the right most x value
   def right=(r)
-    self.x = r - w
+    @x = r - @w
   end
 
   def top
-    y
+    @y
   end
 
   # purpose
   # calculate uppermost coordinate by subtracting the width from the right most x value
   def top=(t)
-    self.y = t
+    @y = t
   end
 
   def bottom
-    y + h
+    @y + @h
   end
 
   def center_y
-    y + h/2
+    @y + @h/2
   end
 
   def center_x
-    x + x/2
+    @x + @x/2
   end
 
   def bottom=(b)
-    self.y = b - h
+    @y = b - @h
   end
 
   # determines whether two objects have colided
   def collide?(other)
     x_overlap = [0, [right, other.right].min - [left, other.left].max].max
     y_overlap = [0, [bottom, other.bottom].min - [top, other.top].max].max
-    x_overlap * y_overlap != 0
+    return x_overlap * y_overlap != 0
   end
 end
 
@@ -222,16 +223,14 @@ end
 #make the starting x and y random
 #make initial velocity random
 class Molecule < GameObject
-  WIDTH = $BALL_SIZE
-  HEIGHT = $BALL_SIZE
 
   attr_accessor :noCollideList
 
   # attribute
   # v: the velocity
-  attr_reader :v, :species
-  def initialize(species, x, y, noCollideList = [])
-    super(x, y, WIDTH, HEIGHT)
+  attr_accessor :v, :species
+  def initialize(species, x, y, v, noCollideList = [])
+    super(x, y, $BALL_SIZE, $BALL_SIZE)
     @v = v
     @species = species
     @noCollideList = noCollideList
@@ -259,7 +258,7 @@ class Molecule < GameObject
   # function to draw the ball (Molecule)
   def drawBall
     puts @species.color
-    Gosu.draw_rect x, y, WIDTH, HEIGHT, @species.color
+    Gosu.draw_rect x, y, $BALL_SIZE, $BALL_SIZE, @species.color
   end
 end
 

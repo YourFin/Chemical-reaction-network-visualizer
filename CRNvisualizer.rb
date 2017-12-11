@@ -21,15 +21,18 @@ OptionParser.new do |opts|
     puts opts
     exit
   end
-  opts.on("-ms", "--mol-size", Integer, "The width of a molecule, in pixels. Default 10.") do |ms|
+  opts.on("-ms", "--mol-size INT", Integer, "The width of a molecule, in pixels. Default 10.") do |ms|
     invalidArguments if ms < 0
     $BALL_SIZE = ms
   end
-  opts.on("-n", "--num-min", Integer, "The number of molecules for the reactant with the smallest non-zero initial value. Default two.") do |nn|
-    invalidArguments if nn < 1
+  opts.on("-n", "--num-min INT", Integer, "The number of molecules for the reactant with the smallest non-zero initial value. Default two.") do | nn |
+    puts nn.class
+    if nn < 1
+      invalidArguments
+    end
     $NUM_MIN = nn
   end
-  opts.on("-mv", "--max-velocity", Float, "The maximum velocity of a particles") do |mv|
+  opts.on("-mv", "--max-velocity FLOAT", Float, "The maximum velocity of a particles") do |mv|
     
   end
 end.parse!
