@@ -74,12 +74,20 @@ def colliBall_h(balls)
     #
     for mol_col_chk in balls.select { |mol| mol != molecule } do
       if mol_col_chk.collide?(molecule)
-        if @crn.reactions.key?([molecule, mol_col_chk])
-          balls.delete(molecule)
-          balls.delete(mol_col_chk)
-          
-        else
-          #bounce
+         if @crn.reactions.key?([molecule.species, mol_col_chk.species]) && !molecule.noCollideList.include?(mol_col_chk)
+           balls.delete(molecule)
+           balls.delete(mol_col_chk)
+
+           products = @crn.reactions[[molecule.species, mol_col_chk.species]][1]
+           for product in products do
+             mol = Molecule.new(product, mol_col_chk.x, mol_col_chk.y,
+                               { :x => rand($MAX_VELOCITY) * ((-1)**rand(2)),
+                                 :y => rand($MAX_VELOCITY) * ((-1)**rand(2))}, products.select{ |prod| product != prod })
+             balls.push(mol)
+           end
+         else
+           molecule.noCollideList = molecule.noCollideList - [mol_col_chk]
+           mol_col_chk.noCollideList = mol_col_chk.noCollideList - [molecule]
         end
       end
     end
