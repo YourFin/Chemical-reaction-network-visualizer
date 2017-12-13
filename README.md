@@ -19,6 +19,7 @@ Takes in `.cps` files from COPASI
 2. Follow linux commands from step 2
 
 ### Windows
+**Warning: not well tested**
 1. Install newest version of Ruby compatible with your computer from `https://rubyinstaller.org/downloads/`
 2. Run `./configure`, which will generate `config.h` and `Makefile`
 3. Run `make`
