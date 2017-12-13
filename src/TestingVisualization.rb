@@ -3,10 +3,14 @@ require 'gosu'
 
 class VisualizerWindow < Gosu::Window
   # creates initial window with all starting molecules
+  attr_accessor :minFramesValue
   def initialize(crn)
     super 640, 480
     @crn = crn
+    $CRN = crn
     self.caption = "CRN"
+
+    @minFramesValue = @crn.reactions.map { |key, value| value[0] }.max
 
     margin = 20
     @balls = []
@@ -30,10 +34,10 @@ class VisualizerWindow < Gosu::Window
             break
           end
         end
-        puts ballt.v
         @balls.push ballt
       end
     end
+
     @score = [0, 0]
     @font = Gosu::Font.new(20)
     @counter = 0
@@ -51,7 +55,7 @@ class VisualizerWindow < Gosu::Window
   # molecules actions include: moving, reacting, bouncing (off walls or other molecules)
   def update_h(balls)
     for molecule in balls
-      molecule.update
+      molecule.update(self)
     end
   end
 
@@ -66,30 +70,39 @@ class VisualizerWindow < Gosu::Window
     end
   end	
 
+  def split(balls, substrates, product_species)
+    for substrate in substrates
+      balls.delete(substrate)
+    end
+    ret = []
+    for product in product_species
+      mol = Molecule.new(product, substrates[0].x, substrates[0].y,
+                         { :x => rand($MAX_VELOCITY) * ((-1)**rand(2)),
+                           :y => rand($MAX_VELOCITY) * ((-1)**rand(2))})
+      ret.push(mol)
+    end #for
+    for mol in ret
+      mol.noCollideList = ret - [mol]
+    end
+    return ret
+  end
+
   # action to be taken when molecules colide and bounce
   def colliBall_h(balls)
     for molecule, mol_col_chk in balls.combination(2)
-        if mol_col_chk.collide?(molecule) && (! molecule.noCollideList.include?(mol_col_chk))
-          if @crn.reactions.key?([molecule.species, mol_col_chk.species]) 
-              balls.delete(molecule)
-              balls.delete(mol_col_chk)
-              products = @crn.reactions[[molecule.species, mol_col_chk.species]][1]
-              for product in products
-                mol = Molecule.new(product, mol_col_chk.x, mol_col_chk.y,
-                                   { :x => rand($MAX_VELOCITY) * ((-1)**rand(2)),
-                                     :y => rand($MAX_VELOCITY) * ((-1)**rand(2))}, products.select{ |prod| product != prod })
-                balls.push(mol)
-              end #for
-          else  
+      if mol_col_chk.collide?(molecule) && (! molecule.noCollideList.include?(mol_col_chk))
+        if @crn.reactions.key?([molecule.species, mol_col_chk.species]) 
+          @balls += split(@balls, [molecule, mol_col_chk], @crn.reactions[[molecule.species, mol_col_chk.species]][1])
+        else  
           #bounce around when it is not a reaction
-            temp = Marshal.load(Marshal.dump(molecule.v))
-            molecule.v = Marshal.load(Marshal.dump(mol_col_chk.v))
-            mol_col_chk.v = temp
-          end #no coList
-        else
-          molecule.noCollideList = molecule.noCollideList - [mol_col_chk]
-          mol_col_chk.noCollideList = mol_col_chk.noCollideList - [molecule]
-        end # if collide
+          temp = Marshal.load(Marshal.dump(molecule.v))
+          molecule.v = Marshal.load(Marshal.dump(mol_col_chk.v))
+          mol_col_chk.v = temp
+        end #no coList
+      else
+        molecule.noCollideList = molecule.noCollideList - [mol_col_chk]
+        mol_col_chk.noCollideList = mol_col_chk.noCollideList - [molecule]
+      end # if collide
     end #for
   end
 
@@ -100,23 +113,12 @@ class VisualizerWindow < Gosu::Window
   def update
     update_h(@balls)
     colliBall_h(@balls)
-
     colliWall_h(@balls)
   end
 
   # draws the background of the visualizer
   def draw_background
     Gosu.draw_rect 0, 0, self.width, self.height, Gosu::Color::BLACK
-  end
-
-  # draws a score (to be changed)
-  def draw_score
-    center_x = self.width / 2
-    offset = 15
-    char_width = 10
-    z_order = 100
-    @font.draw @score[0].to_s, center_x - offset - char_width, offset, z_order
-    @font.draw @score[1].to_s, center_x + offset, offset, z_order
   end
 
   # draws the balls (AKA molecules)
@@ -129,7 +131,6 @@ class VisualizerWindow < Gosu::Window
   # calls the individual draw functions for the background, balls (molecules), and score
   def draw
     draw_background
-    draw_score
     draw_h(@balls)
   end
 end
@@ -210,7 +211,6 @@ end
 #make the starting x and y random
 #make initial velocity random
 class Molecule < GameObject
-
   attr_accessor :noCollideList
 
   # attribute
@@ -224,7 +224,13 @@ class Molecule < GameObject
   end
 
   # used velocity to change the x and y position
-  def update
+  def update(visualizer)
+    #check for spontaneous splits
+    for _, value in $CRN.reactions.select { |key, val| key == [self] }
+      if rand($MIN_TICS / visualizer.minFramesValue * value[0]).round == 0
+        visualizer.split([self], value[1])
+      end
+    end
     self.x += self.v[:x]
     self.y += self.v[:y]
   end
@@ -239,15 +245,8 @@ class Molecule < GameObject
     self.v[:y] = -self.v[:y]
   end
 
-
-
-  def split()
-  end
-
   # function to draw the ball (Molecule)
   def drawBall
     Gosu.draw_rect @x, @y, $BALL_SIZE, $BALL_SIZE, @species.color
   end
 end
-
-
