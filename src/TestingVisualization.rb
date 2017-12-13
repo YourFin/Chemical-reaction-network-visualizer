@@ -9,13 +9,8 @@ class VisualizerWindow < Gosu::Window
     self.caption = "CRN"
 
     margin = 20
-    #read the CRN file and build initial balls
-    #@ballA = Molecule.new( 300, 375, { :x => -3, :y => 0 } )
-    #@ballB = Molecule.new( 50, 400, { :x => 3, :y => 0 } ) 
-    #@balls = [@ballA, @ballB]
     @balls = []
     small = crn.species_list.reduce { | old, nn |  (nn.initial_count < old.initial_count && nn.initial_count > 0.0 ) ? nn : old }.initial_count
-    puts small
     for species in crn.species_list
       species.initial_count = (species.initial_count / small * $NUM_MIN).floor
       for ii in (0..species.initial_count)
@@ -42,7 +37,6 @@ class VisualizerWindow < Gosu::Window
     @score = [0, 0]
     @font = Gosu::Font.new(20)
     @counter = 0
-    puts crn.reactions
   end
 
   # code to close window when esc key pressed
@@ -77,7 +71,6 @@ class VisualizerWindow < Gosu::Window
     for molecule, mol_col_chk in balls.combination(2)
         if mol_col_chk.collide?(molecule) && (! molecule.noCollideList.include?(mol_col_chk))
           if @crn.reactions.key?([molecule.species, mol_col_chk.species]) 
-            puts "I AM FUCKING REACTING"
               balls.delete(molecule)
               balls.delete(mol_col_chk)
               products = @crn.reactions[[molecule.species, mol_col_chk.species]][1]
