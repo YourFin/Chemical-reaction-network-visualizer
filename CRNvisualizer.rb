@@ -38,12 +38,12 @@ OptionParser.new do |opts|
 end.parse!
 
 
-#begin
+begin
   crn = CRN.parseFromCPSFile(ARGV[0])
-#rescue
-#  puts 'Invalid CPS file'
-#  invalidArguments
-#end
+rescue
+  puts 'Invalid CPS file'
+  invalidArguments
+end
 
 window = VisualizerWindow.new(crn)
 window.show
